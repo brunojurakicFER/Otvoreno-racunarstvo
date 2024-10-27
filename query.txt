@@ -1,0 +1,76 @@
+db.drivers.aggregate([
+    {
+        $lookup: {
+            from: "teams",
+            localField: "current_team",
+            foreignField: "name",
+            as: "team_info"
+        }
+    },
+    {
+        $unwind: {
+            path: "$team_info",
+            preserveNullAndEmptyArrays: true
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            name: 1,            
+            surname: 1,        
+            nationality: 1, 
+            wins: 1,                          
+            podiums: 1,                      
+            poles: 1,                           
+            points: 1,                     
+            championships: 1,                   
+            races_done: 1,                
+            status: 1,                         
+            current_team: {
+                $cond: {
+                    if: { $eq: [ { $type: "$team_info" }, "object"] },
+                    then: {
+                        name: { 
+                            $cond: { 
+                                if: { $eq: ["$team_info.name", null] }, 
+                                then: "N/A", 
+                                else: "$team_info.name" 
+                            }
+                        },
+                        country: { 
+                            $cond: { 
+                                if: { $eq: ["$team_info.country", null] }, 
+                                then: "N/A", 
+                                else: "$team_info.country" 
+                            }
+                        },
+                        founded_year: { 
+                            $cond: { 
+                                if: { $eq: ["$team_info.founded_year", null] }, 
+                                then: "N/A", 
+                                else: "$team_info.founded_year" 
+                            }
+                        },
+                        championships_won: { 
+                            $cond: { 
+                                if: { $eq: ["$team_info.championships_won", null] }, 
+                                then: "N/A", 
+                                else: "$team_info.championships_won" 
+                            }
+                        }
+                    },
+                    else: {
+                        name: "N/A",
+                        country: "N/A",
+                        founded_year: "N/A",
+                        championships_won: "N/A"
+                    }
+                }
+            }
+        }
+    },
+    {
+        $out: "drivers_with_teams"
+    }
+]);
+

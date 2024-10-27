@@ -1,0 +1,212 @@
+[
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674ba"
+    },
+    "name": "Lewis",
+    "surname": "Hamilton",
+    "nationality": "British",
+    "wins": 105,
+    "podiums": 201,
+    "poles": 104,
+    "points": 4800,
+    "championships": 7,
+    "races_done": 351,
+    "status": "active",
+    "current_team": {
+      "name": "Mercedes",
+      "country": "Germany",
+      "founded_year": 2010,
+      "championships_won": 8
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674bb"
+    },
+    "name": "Michael",
+    "surname": "Schumacher",
+    "nationality": "German",
+    "wins": 91,
+    "podiums": 155,
+    "poles": 68,
+    "points": 1566,
+    "championships": 7,
+    "races_done": 308,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674bc"
+    },
+    "name": "Sebastian",
+    "surname": "Vettel",
+    "nationality": "German",
+    "wins": 53,
+    "podiums": 122,
+    "poles": 57,
+    "points": 3024,
+    "championships": 4,
+    "races_done": 300,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674bd"
+    },
+    "name": "Alain",
+    "surname": "Prost",
+    "nationality": "French",
+    "wins": 51,
+    "podiums": 106,
+    "poles": 33,
+    "points": 798,
+    "championships": 4,
+    "races_done": 199,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674be"
+    },
+    "name": "Niki",
+    "surname": "Lauda",
+    "nationality": "Austrian",
+    "wins": 25,
+    "podiums": 54,
+    "poles": 24,
+    "points": 420,
+    "championships": 3,
+    "races_done": 171,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674bf"
+    },
+    "name": "Ayrton",
+    "surname": "Senna",
+    "nationality": "Brazilian",
+    "wins": 41,
+    "podiums": 80,
+    "poles": 65,
+    "points": 614,
+    "championships": 3,
+    "races_done": 161,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674c0"
+    },
+    "name": "Fernando",
+    "surname": "Alonso",
+    "nationality": "Spanish",
+    "wins": 32,
+    "podiums": 98,
+    "poles": 22,
+    "points": 1956,
+    "championships": 2,
+    "races_done": 350,
+    "status": "active",
+    "current_team": {
+      "name": "Aston Martin",
+      "country": "United Kingdom",
+      "founded_year": 2021,
+      "championships_won": 0
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674c1"
+    },
+    "name": "Kimi",
+    "surname": "Raikkonen",
+    "nationality": "Finnish",
+    "wins": 21,
+    "podiums": 103,
+    "poles": 18,
+    "points": 1831,
+    "championships": 1,
+    "races_done": 353,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674c2"
+    },
+    "name": "Jenson",
+    "surname": "Button",
+    "nationality": "British",
+    "wins": 15,
+    "podiums": 50,
+    "poles": 8,
+    "points": 1031,
+    "championships": 1,
+    "races_done": 306,
+    "status": "retired",
+    "current_team": {
+      "name": "N/A",
+      "country": "N/A",
+      "founded_year": "N/A",
+      "championships_won": "N/A"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "671e81e9989d604df06674c3"
+    },
+    "name": "Max",
+    "surname": "Verstappen",
+    "nationality": "Dutch",
+    "wins": 61,
+    "podiums": 103,
+    "poles": 21,
+    "points": 1893,
+    "championships": 3,
+    "races_done": 140,
+    "status": "active",
+    "current_team": {
+      "name": "Red Bull Racing",
+      "country": "Austria",
+      "founded_year": 2005,
+      "championships_won": 7
+    }
+  }
+]

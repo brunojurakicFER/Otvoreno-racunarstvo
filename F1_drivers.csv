@@ -1,0 +1,11 @@
+name,surname,nationality,wins,podiums,poles,points,championships,races_done,status,current_team.name,current_team.country,current_team.founded_year,current_team.championships_won
+Lewis,Hamilton,British,105,201,104,4800,7,351,active,Mercedes,Germany,2010,8
+Michael,Schumacher,German,91,155,68,1566,7,308,retired,N/A,N/A,N/A,N/A
+Sebastian,Vettel,German,53,122,57,3024,4,300,retired,N/A,N/A,N/A,N/A
+Alain,Prost,French,51,106,33,798,4,199,retired,N/A,N/A,N/A,N/A
+Niki,Lauda,Austrian,25,54,24,420,3,171,retired,N/A,N/A,N/A,N/A
+Ayrton,Senna,Brazilian,41,80,65,614,3,161,retired,N/A,N/A,N/A,N/A
+Fernando,Alonso,Spanish,32,98,22,1956,2,350,active,Aston Martin,United Kingdom,2021,0
+Kimi,Raikkonen,Finnish,21,103,18,1831,1,353,retired,N/A,N/A,N/A,N/A
+Jenson,Button,British,15,50,8,1031,1,306,retired,N/A,N/A,N/A,N/A
+Max,Verstappen,Dutch,61,103,21,1893,3,140,active,Red Bull Racing,Austria,2005,7
