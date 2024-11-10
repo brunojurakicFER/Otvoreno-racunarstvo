@@ -1,0 +1,45 @@
+form {
+    margin-bottom: 20px;
+}
+
+input, select, button {
+    padding: 10px;
+    margin-right: 10px;
+    border: 2px solid mediumpurple;
+    border-radius: 5px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+button {
+    background-color: mediumpurple;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rebeccapurple;
+    transition: 0.2s;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #333333;
+    text-align: left;
+}
+
+th {
+    background-color: #1e1e1e;
+}
+
+tr:nth-child(even) {
+    background-color: #1e1e1e;
+}
+
+tr:nth-child(odd) {
+    background-color: #2e2e2e;
+}

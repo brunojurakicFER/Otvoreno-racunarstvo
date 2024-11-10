@@ -1,0 +1,35 @@
+.dataset-info {
+    padding: 10px;
+}
+
+.dataset-info h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: mediumpurple;
+}
+
+.dataset-info h3 {
+    font-size: 20px;
+    margin-top: 20px;
+    color: mediumpurple;
+}
+
+.dataset-info p, .dataset-info ul {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-left: 20px;
+}
+
+.dataset-info ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.dataset-info ul ul {
+    padding-left: 20px;
+    margin-left: 20px;
+}
+
+.dataset-info li strong {
+    color: #a58fdd;
+}

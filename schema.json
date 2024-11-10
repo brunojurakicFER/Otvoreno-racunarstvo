@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "$id": "https://or.fer.unizg.hr/F1_drivers.json",
+  "type": "array",
+  "title": "Formula 1 Drivers Data",
+  "description": "A comprehensive list of Formula 1 drivers with detailed statistics and team information.",
+  "required": [
+    "_id",
+    "name",
+    "surname",
+    "nationality",
+    "wins",
+    "podiums",
+    "poles",
+    "points",
+    "championships",
+    "races_done",
+    "status",
+    "current_team"
+  ],
+  "properties": {
+    "_id": {
+      "type": "object",
+      "title": "Driver ID",
+      "required": [
+        "$oid"
+      ],
+      "properties": {
+        "$oid": {
+          "type": "string",
+          "title": "Object ID"
+        }
+      }
+    },
+    "name": {
+      "type": "string",
+      "title": "Driver's First Name"
+    },
+    "surname": {
+      "type": "string",
+      "title": "Driver's Last Name"
+    },
+    "nationality": {
+      "type": "string",
+      "title": "Driver's Nationality"
+    },
+    "wins": {
+      "type": "integer",
+      "title": "Number of Wins"
+    },
+    "podiums": {
+      "type": "integer",
+      "title": "Number of Podium Finishes"
+    },
+    "poles": {
+      "type": "integer",
+      "title": "Number of Pole Positions"
+    },
+    "points": {
+      "type": "integer",
+      "title": "Total Points Scored"
+    },
+    "championships": {
+      "type": "integer",
+      "title": "Number of Championships Won"
+    },
+    "races_done": {
+      "type": "integer",
+      "title": "Number of Races Completed"
+    },
+    "status": {
+      "type": "string",
+      "title": "Current Status (Active/Retired)"
+    },
+    "current_team": {
+      "type": "object",
+      "title": "Current Team Information",
+      "required": [
+        "name",
+        "country",
+        "founded_year",
+        "championships_won"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Team Name"
+        },
+        "country": {
+          "type": "string",
+          "title": "Team's Country"
+        },
+        "founded_year": {
+          "type": "integer",
+          "title": "Year Team Was Founded"
+        },
+        "championships_won": {
+          "type": "integer",
+          "title": "Number of Championships Won by Team"
+        }
+      }
+    }
+  }
+}
