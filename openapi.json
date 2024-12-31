@@ -1,0 +1,316 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "F1 Drivers API",
+    "description": "CRUD API for F1 drivers and teams data",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Bruno Jurakic",
+      "email": "bj54759@fer.hr"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "paths": {
+    "/drivers": {
+      "get": {
+        "summary": "Get all drivers",
+        "description": "Returns a list of all drivers",
+        "responses": {
+          "200": {
+            "description": "A list of drivers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Driver"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new driver",
+        "description": "Creates a new driver",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Driver"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Driver added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Driver"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/drivers/{id}": {
+      "get": {
+        "summary": "Get driver by ID",
+        "description": "Returns a single driver",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the driver"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Driver found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Driver"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Driver not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update driver by ID",
+        "description": "Updates an existing driver",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the driver"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Driver"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Driver updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Driver"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Driver not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete driver by ID",
+        "description": "Deletes a driver",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID of the driver"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Driver deleted"
+          },
+          "400": {
+            "description": "Invalid ID"
+          },
+          "404": {
+            "description": "Driver not found"
+          }
+        }
+      }
+    },
+    "/drivers/json": {
+      "get": {
+        "summary": "Get drivers JSON file",
+        "description": "Returns a JSON file with all drivers",
+        "responses": {
+          "200": {
+            "description": "JSON file sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error sending JSON file"
+          }
+        }
+      }
+    },
+    "/drivers/csv": {
+      "get": {
+        "summary": "Get drivers CSV file",
+        "description": "Returns a CSV file with all drivers",
+        "responses": {
+          "200": {
+            "description": "CSV file sent",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error sending CSV file"
+          }
+        }
+      }
+    },
+    "/drivers/export/json": {
+      "get": {
+        "summary": "Export filtered drivers as JSON",
+        "description": "Returns a JSON file with filtered drivers",
+        "responses": {
+          "200": {
+            "description": "Filtered drivers JSON exported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Driver"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error exporting JSON file"
+          }
+        }
+      }
+    },
+    "/drivers/export/csv": {
+      "get": {
+        "summary": "Export filtered drivers as CSV",
+        "description": "Returns a CSV file with filtered drivers",
+        "responses": {
+          "200": {
+            "description": "Filtered drivers CSV exported",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error exporting CSV file"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Driver": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "nationality": {
+            "type": "string"
+          },
+          "wins": {
+            "type": "integer"
+          },
+          "podiums": {
+            "type": "integer"
+          },
+          "poles": {
+            "type": "integer"
+          },
+          "points": {
+            "type": "integer"
+          },
+          "championships": {
+            "type": "integer"
+          },
+          "races_done": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "current_team": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              },
+              "founded_year": {
+                "type": "integer"
+              },
+              "championships_won": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

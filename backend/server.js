@@ -239,7 +239,11 @@ app.delete('/drivers/:id', validateObjectId, async (req, res) => {
   }
 })
 
-
+// OpenAPI json
+app.get('/openapi.json', (req, res) => {
+  const filePath = path.join(__dirname, '../openapi.json')
+  res.sendFile(filePath);
+});
 
 // Handle unsupported HTTP methods for defined routes
 app.all('/drivers*', (req, res, next) => {
