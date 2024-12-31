@@ -241,6 +241,14 @@ app.get('/drivers/export/csv', filterDrivers, (req, res) => {
   }
 })
 
+// Handle unsupported HTTP methods for defined routes
+app.all('/drivers*', (req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'POST' && req.method !== 'PUT' && req.method !== 'DELETE') {
+    return res.status(501).formatResponse('Not Implemented', 'Method not implemented for requested resource', null);
+  }
+  next();
+});
+
 // Handle unimplemented routes
 app.use((req, res) => {
   res.status(404).formatResponse('Not Found', 'The requested URL was not found on this server', null);
