@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const path = require('path')
 const json2csv = require('json2csv').parse
 const Driver = require('./models/Driver')
-const {Parser} = require("json2csv");
+const { Parser } = require("json2csv")
 
 const mongoDB = 'mongodb://localhost:27017/F1_drivers'
 app.use(express.json())
@@ -24,44 +24,44 @@ const validateObjectId = (req, res, next) => {
 // Middleware to filter drivers
 const filterDrivers = async (req, res, next) => {
   try {
-    const {column, value} = req.query;
-    let query = {};
+    const { column, value } = req.query
+    let query = {}
 
     if (value) {
-      const searchRegex = {$regex: value, $options: 'i'};
-      const parsedValue = parseInt(value);
+      const searchRegex = { $regex: value, $options: 'i' }
+      const parsedValue = parseInt(value)
 
       if (column) {
         if (['wins', 'podiums', 'poles', 'points', 'championships', 'races_done', 'current_team.founded_year', 'current_team.championships_won'].includes(column)) {
-          query[column] = isNaN(parsedValue) ? 0 : parsedValue;
+          query[column] = isNaN(parsedValue) ? 0 : parsedValue
         } else {
-          query[column] = searchRegex;
+          query[column] = searchRegex
         }
       } else {
         query = {
           $or: [
-            {name: searchRegex},
-            {surname: searchRegex},
-            {nationality: searchRegex},
+            { name: searchRegex },
+            { surname: searchRegex },
+            { nationality: searchRegex },
             ...(isNaN(parsedValue) ? [] : [
-              {wins: parsedValue},
-              {podiums: parsedValue},
-              {poles: parsedValue},
-              {points: parsedValue},
-              {championships: parsedValue},
-              {races_done: parsedValue},
-              {'current_team.founded_year': parsedValue},
-              {'current_team.championships_won': parsedValue}
+              { wins: parsedValue },
+              { podiums: parsedValue },
+              { poles: parsedValue },
+              { points: parsedValue },
+              { championships: parsedValue },
+              { races_done: parsedValue },
+              { 'current_team.founded_year': parsedValue },
+              { 'current_team.championships_won': parsedValue }
             ]),
-            {status: searchRegex},
-            {'current_team.name': searchRegex},
-            {'current_team.country': searchRegex}
+            { status: searchRegex },
+            { 'current_team.name': searchRegex },
+            { 'current_team.country': searchRegex }
           ]
-        };
+        }
       }
     }
 
-    let drivers = await Driver.find(query).lean();
+    let drivers = await Driver.find(query).lean()
 
     // Modify the response data to include "N/A" for missing fields
     drivers = drivers.map(driver => ({
@@ -73,21 +73,19 @@ const filterDrivers = async (req, res, next) => {
         founded_year: driver.current_team?.founded_year || 'N/A',
         championships_won: driver.current_team?.championships_won || 'N/A'
       }
-    }));
+    }))
 
-    req.drivers = drivers;
-    next();
+    req.drivers = drivers
+    next()
   } catch (err) {
-    res.status(500).json({error: err});
+    res.status(500).json({ error: err })
   }
-};
-
+}
 
 // get all drivers from db
 app.get('/drivers', filterDrivers, (req, res) => {
-  res.json(req.drivers);
-});
-
+  res.json(req.drivers)
+})
 
 // get a single driver by ID
 app.get('/drivers/:id', validateObjectId, async (req, res) => {
@@ -103,11 +101,10 @@ app.get('/drivers/:id', validateObjectId, async (req, res) => {
   }
 })
 
-
 // post for adding a new driver
 app.post('/drivers', async (req, res) => {
   try {
-    console.log('Request body:', req.body); // Add this line to log the request body
+    console.log('Request body:', req.body) // Add this line to log the request body
     const newDriver = new Driver(req.body)
     const savedDriver = await newDriver.save()
     res.status(201).send(savedDriver)
@@ -115,7 +112,6 @@ app.post('/drivers', async (req, res) => {
     res.status(500).send({ error: err.message })
   }
 })
-
 
 // put for updating an existing driver by ID
 app.put('/drivers/:id', validateObjectId, async (req, res) => {
@@ -131,6 +127,19 @@ app.put('/drivers/:id', validateObjectId, async (req, res) => {
   }
 })
 
+// delete a driver by ID
+app.delete('/drivers/:id', validateObjectId, async (req, res) => {
+  try {
+    const deletedDriver = await Driver.findByIdAndDelete(req.params.id)
+    if (!deletedDriver) {
+      res.status(404).send({ message: 'Driver not found' })
+    } else {
+      res.status(200).send({ message: 'Driver deleted successfully' })
+    }
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
 
 // get drivers json from file
 app.get('/drivers/json', (req, res) => {
@@ -138,11 +147,10 @@ app.get('/drivers/json', (req, res) => {
   res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.json')
   res.sendFile(filePath, (err) => {
     if (err) {
-      res.status(500).json({error: 'An error occurred while sending the JSON file'})
+      res.status(500).json({ error: 'An error occurred while sending the JSON file' })
     }
   })
 })
-
 
 // get drivers csv from file
 app.get('/drivers/csv', (req, res) => {
@@ -150,17 +158,16 @@ app.get('/drivers/csv', (req, res) => {
   res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.csv')
   res.sendFile(filePath, (err) => {
     if (err) {
-      res.status(500).json({error: 'An error occurred while sending the CSV file'})
+      res.status(500).json({ error: 'An error occurred while sending the CSV file' })
     }
   })
 })
 
 // get filtered drivers json from db
 app.get('/drivers/export/json', filterDrivers, (req, res) => {
-  res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.json');
-  res.json(req.drivers);
-});
-
+  res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.json')
+  res.json(req.drivers)
+})
 
 // get filtered drivers csv from db
 app.get('/drivers/export/csv', filterDrivers, (req, res) => {
@@ -170,26 +177,25 @@ app.get('/drivers/export/csv', filterDrivers, (req, res) => {
     current_team_country: driver.current_team.country,
     current_team_founded_year: driver.current_team.founded_year,
     current_team_championships_won: driver.current_team.championships_won
-  }));
+  }))
 
   const fields = [
     '_id', 'name', 'surname', 'nationality', 'wins', 'podiums', 'poles', 'points', 'championships', 'races_done', 'status',
     'current_team.name', 'current_team.country', 'current_team.founded_year', 'current_team.championships_won'
-  ];
-  const opts = { fields };
+  ]
+  const opts = { fields }
 
   try {
-    const csv = json2csv(drivers, opts);
-    res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.csv');
-    res.set('Content-Type', 'text/csv');
-    res.send(csv);
+    const csv = json2csv(drivers, opts)
+    res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.csv')
+    res.set('Content-Type', 'text/csv')
+    res.send(csv)
   } catch (err) {
-    console.error('Error generating CSV:', err);
-    res.status(500).json({ error: 'An error occurred while generating the CSV file' });
+    console.error('Error generating CSV:', err)
+    res.status(500).json({ error: 'An error occurred while generating the CSV file' })
   }
-});
-
+})
 
 app.listen(3000, () => {
-  console.log('server started on port 3000');
+  console.log('server started on port 3000')
 })

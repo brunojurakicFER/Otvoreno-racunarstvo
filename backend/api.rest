@@ -34,3 +34,7 @@ Content-Type: application/json
   "name": "Lewis",
   "surname": "Hamilton"
 }
+
+###
+
+DELETE http://localhost:3000/drivers/67740d05f106663988eaed31
