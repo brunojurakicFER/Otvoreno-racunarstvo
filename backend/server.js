@@ -29,7 +29,10 @@ app.use(formatResponse);
 // Middleware to validate ObjectId
 const validateObjectId = (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(400).send({ message: 'Invalid ID format' })
+    return res.status(400).send({ 
+      status: 'Bad Request',
+      message: 'Driver with the provided ID doesn\'t exist',
+      response: null })
   }
   next()
 }
