@@ -87,6 +87,40 @@ app.get('/drivers', filterDrivers, (req, res) => {
   res.json(req.drivers)
 })
 
+
+// get all teams
+app.get('/teams', async (req, res) => {
+  try {
+    let teams = await Driver.distinct('current_team.name')
+    teams = teams.filter(team => team !== 'N/A')
+    res.status(200).send(teams)
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+
+// get drivers by nationality
+app.get('/drivers/nationality/:nationality', async (req, res) => {
+  try {
+    const drivers = await Driver.find({ nationality: req.params.nationality })
+    res.status(200).send(drivers)
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+// get drivers by status
+app.get('/drivers/status/:status', async (req, res) => {
+  try {
+    const drivers = await Driver.find({ status: req.params.status })
+    res.status(200).send(drivers)
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+
 // get a single driver by ID
 app.get('/drivers/:id', validateObjectId, async (req, res) => {
   try {
