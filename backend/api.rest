@@ -56,3 +56,16 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3000/drivers/677434fd8cd84fdf30ba0fb1
+
+###
+
+GET http://localhost:3000/drivers/json
+
+###
+
+GET http://localhost:3000/drivers/csv
+
+###
+
+GET http://localhost:3000/drivers/export/json?column=&value=lew
+

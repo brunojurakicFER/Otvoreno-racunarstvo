@@ -95,11 +95,65 @@ const filterDrivers = async (req, res, next) => {
   }
 }
 
+// get drivers json from file
+app.get('/drivers/json', (req, res) => {
+  const filePath = path.join(__dirname, '../F1_drivers.json')
+  res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.json')
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.formatResponse('Error', 'An error occurred while sending the JSON file', null);
+    }
+  })
+})
+
+// get drivers csv from file
+app.get('/drivers/csv', (req, res) => {
+  const filePath = path.join(__dirname, '../F1_drivers.csv')
+  res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.csv')
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.formatResponse('Error', 'An error occurred while sending the CSV file', null);
+    }
+  })
+})
+
+// get filtered drivers json from db
+app.get('/drivers/export/json', filterDrivers, (req, res) => {
+  res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.json')
+  res.json(req.drivers)
+})
+
+// get filtered drivers csv from db
+app.get('/drivers/export/csv', filterDrivers, (req, res) => {
+  const drivers = req.drivers.map(driver => ({
+    ...driver,
+    current_team_name: driver.current_team.name,
+    current_team_country: driver.current_team.country,
+    current_team_founded_year: driver.current_team.founded_year,
+    current_team_championships_won: driver.current_team.championships_won
+  }))
+
+  const fields = [
+    '_id', 'name', 'surname', 'nationality', 'wins', 'podiums', 'poles', 'points', 'championships', 'races_done', 'status',
+    'current_team.name', 'current_team.country', 'current_team.founded_year', 'current_team.championships_won'
+  ]
+  const opts = { fields }
+
+  try {
+    const csv = json2csv(drivers, opts)
+    res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.csv')
+    res.set('Content-Type', 'text/csv')
+    res.send(csv)
+  } catch (err) {
+    console.error('Error generating CSV:', err)
+    res.status(500).json({ error: 'An error occurred while generating the CSV file' })
+  }
+})
+
 // get all drivers from db
 app.get('/drivers', filterDrivers, (req, res) => {
   res.formatResponse('OK', 'Fetched drivers', req.drivers);
 })
-
 
 // get all teams
 app.get('/teams', async (req, res) => {
@@ -111,7 +165,6 @@ app.get('/teams', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 })
-
 
 // get drivers by nationality
 app.get('/drivers/nationality/:nationality', async (req, res) => {
@@ -186,60 +239,7 @@ app.delete('/drivers/:id', validateObjectId, async (req, res) => {
   }
 })
 
-// get drivers json from file
-app.get('/drivers/json', (req, res) => {
-  const filePath = path.join(__dirname, '../F1_drivers.json')
-  res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.json')
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      res.status(500).json({ error: 'An error occurred while sending the JSON file' })
-    }
-  })
-})
 
-// get drivers csv from file
-app.get('/drivers/csv', (req, res) => {
-  const filePath = path.join(__dirname, '../F1_drivers.csv')
-  res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.csv')
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      res.status(500).json({ error: 'An error occurred while sending the CSV file' })
-    }
-  })
-})
-
-// get filtered drivers json from db
-app.get('/drivers/export/json', filterDrivers, (req, res) => {
-  res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.json')
-  res.json(req.drivers)
-})
-
-// get filtered drivers csv from db
-app.get('/drivers/export/csv', filterDrivers, (req, res) => {
-  const drivers = req.drivers.map(driver => ({
-    ...driver,
-    current_team_name: driver.current_team.name,
-    current_team_country: driver.current_team.country,
-    current_team_founded_year: driver.current_team.founded_year,
-    current_team_championships_won: driver.current_team.championships_won
-  }))
-
-  const fields = [
-    '_id', 'name', 'surname', 'nationality', 'wins', 'podiums', 'poles', 'points', 'championships', 'races_done', 'status',
-    'current_team.name', 'current_team.country', 'current_team.founded_year', 'current_team.championships_won'
-  ]
-  const opts = { fields }
-
-  try {
-    const csv = json2csv(drivers, opts)
-    res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.csv')
-    res.set('Content-Type', 'text/csv')
-    res.send(csv)
-  } catch (err) {
-    console.error('Error generating CSV:', err)
-    res.status(500).json({ error: 'An error occurred while generating the CSV file' })
-  }
-})
 
 // Handle unsupported HTTP methods for defined routes
 app.all('/drivers*', (req, res, next) => {

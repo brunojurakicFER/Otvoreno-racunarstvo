@@ -15,7 +15,7 @@ const Datatable = () => {
           value: searchValue
         }
       });
-      setData(response.data);
+      setData(response.data.response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -30,7 +30,7 @@ const Datatable = () => {
         },
         responseType: 'blob'
       });
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const url = window.URL.createObjectURL(new Blob([response.data.response]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', `filtered_drivers.${format}`);
