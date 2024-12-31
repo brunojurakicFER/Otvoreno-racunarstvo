@@ -13,6 +13,13 @@ mongoose.connect(mongoDB)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err))
 
+// Middleware to validate ObjectId
+const validateObjectId = (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).send({ message: 'Invalid ID format' })
+  }
+  next()
+}
 
 // Middleware to filter drivers
 const filterDrivers = async (req, res, next) => {
@@ -83,7 +90,7 @@ app.get('/drivers', filterDrivers, (req, res) => {
 
 
 // get a single driver by ID
-app.get('/drivers/:id', async (req, res) => {
+app.get('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const driver = await Driver.findById(req.params.id)
     if (!driver) {
@@ -111,7 +118,7 @@ app.post('/drivers', async (req, res) => {
 
 
 // put for updating an existing driver by ID
-app.put('/drivers/:id', async (req, res) => {
+app.put('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const updatedDriver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
     if (!updatedDriver) {

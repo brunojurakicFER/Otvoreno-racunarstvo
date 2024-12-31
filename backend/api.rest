@@ -27,10 +27,10 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/drivers/671e81e9989604df06674ba
+PUT http://localhost:3000/drivers/671e81e9989d604df06674ba
 Content-Type: application/json
 
 {
   "name": "Lewis",
-  "surname": "Jamilton"
+  "surname": "Hamilton"
 }
