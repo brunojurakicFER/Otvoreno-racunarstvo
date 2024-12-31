@@ -29,12 +29,9 @@ app.use(formatResponse);
 // Middleware to validate ObjectId
 const validateObjectId = (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(400).send({ 
-      status: 'Bad Request',
-      message: 'Driver with the provided ID doesn\'t exist',
-      response: null })
+    return res.status(400).formatResponse('Bad Request', 'Driver with the provided ID doesn\'t exist', null);
   }
-  next()
+  next();
 }
 
 // Middleware to filter drivers
@@ -94,7 +91,7 @@ const filterDrivers = async (req, res, next) => {
     req.drivers = drivers
     next()
   } catch (err) {
-    res.status(500).json({ error: err })
+    res.formatResponse('Error', err.message, null);
   }
 }
 
@@ -243,6 +240,11 @@ app.get('/drivers/export/csv', filterDrivers, (req, res) => {
     res.status(500).json({ error: 'An error occurred while generating the CSV file' })
   }
 })
+
+// Handle unimplemented routes
+app.use((req, res) => {
+  res.status(404).formatResponse('Not Found', 'The requested URL was not found on this server', null);
+});
 
 app.listen(3000, () => {
   console.log('server started on port 3000')
