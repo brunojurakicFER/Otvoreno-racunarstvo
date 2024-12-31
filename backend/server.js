@@ -7,6 +7,7 @@ const Driver = require('./models/Driver')
 const {Parser} = require("json2csv");
 
 const mongoDB = 'mongodb://localhost:27017/F1_drivers'
+app.use(express.json())
 
 mongoose.connect(mongoDB)
   .then(() => console.log('MongoDB connected'))
@@ -79,6 +80,34 @@ const filterDrivers = async (req, res, next) => {
 app.get('/drivers', filterDrivers, (req, res) => {
   res.json(req.drivers);
 });
+
+
+// get a single driver by ID
+app.get('/drivers/:id', async (req, res) => {
+  try {
+    const driver = await Driver.findById(req.params.id)
+    if (!driver) {
+      res.status(404).send({ message: 'Driver not found' })
+    } else {
+      res.status(200).send(driver)
+    }
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+
+// post for adding a new driver
+app.post('/drivers', async (req, res) => {
+  try {
+    console.log('Request body:', req.body); // Add this line to log the request body
+    const newDriver = new Driver(req.body)
+    const savedDriver = await newDriver.save()
+    res.status(201).send(savedDriver)
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
 
 
 // get drivers json from file

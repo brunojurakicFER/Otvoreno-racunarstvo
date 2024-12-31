@@ -1,1 +1,25 @@
-http://localhost:3000/drivers/export/csv?value=german&column=nationality
+GET http://localhost:3000/drivers/671e81e9989d604df06674ba
+
+###
+
+POST http://localhost:3000/drivers
+Content-Type: application/json
+
+{
+  "name": "Lewis",
+  "surname": "Jamilton",
+  "nationality": "British",
+  "wins": 100,
+  "podiums": 170,
+  "poles": 101,
+  "points": 4000,
+  "championships": 7,
+  "races_done": 270,
+  "status": "active",
+  "current_team": {
+    "name": "Mercedes",
+    "country": "Germany",
+    "founded_year": 1954,
+    "championships_won": 8
+  }
+}
