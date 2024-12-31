@@ -127,36 +127,34 @@ app.get('/drivers/nationality/:nationality', async (req, res) => {
 app.get('/drivers/status/:status', async (req, res) => {
   try {
     const drivers = await Driver.find({ status: req.params.status })
-    res.status(200).send(drivers)
+    res.formatResponse('OK', 'Fetched drivers by status', drivers);
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.formatResponse('Error', err.message, null);
   }
 })
-
 
 // get a single driver by ID
 app.get('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const driver = await Driver.findById(req.params.id)
     if (!driver) {
-      res.status(404).json({ message: 'Driver not found' });
+      res.formatResponse('Not Found', 'Driver with the provided ID doesn\'t exist', null);
     } else {
       res.formatResponse('OK', 'Fetched driver', driver);
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.formatResponse('Error', err.message, null);
   }
 })
 
 // post for adding a new driver
 app.post('/drivers', async (req, res) => {
   try {
-    console.log('Request body:', req.body) // Add this line to log the request body
     const newDriver = new Driver(req.body)
     const savedDriver = await newDriver.save()
     res.formatResponse('OK', 'Driver added', savedDriver);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.formatResponse('Error', err.message, null);
   }
 })
 
@@ -165,12 +163,12 @@ app.put('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const updatedDriver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
     if (!updatedDriver) {
-      res.status(404).json({ message: 'Driver not found' });
+      res.formatResponse('Not Found', 'Driver with the provided ID doesn\'t exist', null);
     } else {
       res.formatResponse('OK', 'Driver updated', updatedDriver);
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.formatResponse('Error', err.message, null);
   }
 })
 
@@ -179,12 +177,12 @@ app.delete('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const deletedDriver = await Driver.findByIdAndDelete(req.params.id)
     if (!deletedDriver) {
-      res.status(404).json({ message: 'Driver not found' });
+      res.formatResponse('Not Found', 'Driver with the provided ID doesn\'t exist', null);
     } else {
       res.formatResponse('OK', 'Driver deleted', { message: 'Driver deleted successfully' });
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.formatResponse('Error', err.message, null);
   }
 })
 
