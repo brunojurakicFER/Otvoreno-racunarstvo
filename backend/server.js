@@ -110,6 +110,21 @@ app.post('/drivers', async (req, res) => {
 })
 
 
+// put for updating an existing driver by ID
+app.put('/drivers/:id', async (req, res) => {
+  try {
+    const updatedDriver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+    if (!updatedDriver) {
+      res.status(404).send({ message: 'Driver not found' })
+    } else {
+      res.status(200).send(updatedDriver)
+    }
+  } catch (err) {
+    res.status(500).send({ error: err.message })
+  }
+})
+
+
 // get drivers json from file
 app.get('/drivers/json', (req, res) => {
   const filePath = path.join(__dirname, '../F1_drivers.json')

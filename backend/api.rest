@@ -23,3 +23,14 @@ Content-Type: application/json
     "championships_won": 8
   }
 }
+
+
+###
+
+PUT http://localhost:3000/drivers/671e81e9989604df06674ba
+Content-Type: application/json
+
+{
+  "name": "Lewis",
+  "surname": "Jamilton"
+}
