@@ -13,6 +13,19 @@ mongoose.connect(mongoDB)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err))
 
+const formatResponse = (req, res, next) => {
+  res.formatResponse = (status, message, data) => {
+    res.json({
+      status: status,
+      message: message,
+      response: data
+    });
+  };
+  next();
+};
+
+app.use(formatResponse);
+
 // Middleware to validate ObjectId
 const validateObjectId = (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -84,7 +97,7 @@ const filterDrivers = async (req, res, next) => {
 
 // get all drivers from db
 app.get('/drivers', filterDrivers, (req, res) => {
-  res.json(req.drivers)
+  res.formatResponse('OK', 'Fetched drivers', req.drivers);
 })
 
 
@@ -93,9 +106,9 @@ app.get('/teams', async (req, res) => {
   try {
     let teams = await Driver.distinct('current_team.name')
     teams = teams.filter(team => team !== 'N/A')
-    res.status(200).send(teams)
+    res.formatResponse('OK', 'Fetched teams', teams);
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.status(500).json({ error: err.message });
   }
 })
 
@@ -104,9 +117,9 @@ app.get('/teams', async (req, res) => {
 app.get('/drivers/nationality/:nationality', async (req, res) => {
   try {
     const drivers = await Driver.find({ nationality: req.params.nationality })
-    res.status(200).send(drivers)
+    res.formatResponse('OK', 'Fetched drivers by nationality', drivers);
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.status(500).json({ error: err.message });
   }
 })
 
@@ -126,12 +139,12 @@ app.get('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const driver = await Driver.findById(req.params.id)
     if (!driver) {
-      res.status(404).send({ message: 'Driver not found' })
+      res.status(404).json({ message: 'Driver not found' });
     } else {
-      res.status(200).send(driver)
+      res.formatResponse('OK', 'Fetched driver', driver);
     }
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.status(500).json({ error: err.message });
   }
 })
 
@@ -141,9 +154,9 @@ app.post('/drivers', async (req, res) => {
     console.log('Request body:', req.body) // Add this line to log the request body
     const newDriver = new Driver(req.body)
     const savedDriver = await newDriver.save()
-    res.status(201).send(savedDriver)
+    res.formatResponse('OK', 'Driver added', savedDriver);
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.status(500).json({ error: err.message });
   }
 })
 
@@ -152,12 +165,12 @@ app.put('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const updatedDriver = await Driver.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
     if (!updatedDriver) {
-      res.status(404).send({ message: 'Driver not found' })
+      res.status(404).json({ message: 'Driver not found' });
     } else {
-      res.status(200).send(updatedDriver)
+      res.formatResponse('OK', 'Driver updated', updatedDriver);
     }
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.status(500).json({ error: err.message });
   }
 })
 
@@ -166,12 +179,12 @@ app.delete('/drivers/:id', validateObjectId, async (req, res) => {
   try {
     const deletedDriver = await Driver.findByIdAndDelete(req.params.id)
     if (!deletedDriver) {
-      res.status(404).send({ message: 'Driver not found' })
+      res.status(404).json({ message: 'Driver not found' });
     } else {
-      res.status(200).send({ message: 'Driver deleted successfully' })
+      res.formatResponse('OK', 'Driver deleted', { message: 'Driver deleted successfully' });
     }
   } catch (err) {
-    res.status(500).send({ error: err.message })
+    res.status(500).json({ error: err.message });
   }
 })
 
