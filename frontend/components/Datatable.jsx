@@ -1,6 +1,9 @@
+'use client'
+
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import '../Styles/Datatable.css';
+
 
 const Datatable = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -9,7 +12,7 @@ const Datatable = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/drivers', {
+      const response = await axios.get('http://localhost:10000/drivers', {
         params: {
           column: selectedColumn,
           value: searchValue
@@ -23,7 +26,7 @@ const Datatable = () => {
 
   const downloadFile = async (format) => {
     try {
-      const response = await axios.get(`http://localhost:3000/drivers/export/${format}`, {
+      const response = await axios.get(`http://localhost:10000/drivers/export/${format}`, {
         params: {
           column: selectedColumn,
           value: searchValue
@@ -52,13 +55,13 @@ const Datatable = () => {
         e.preventDefault();
         handleSearch();
       }}>
-        <input className={'m-3 p-1'}
+        <input className={'m-3 p-1 rounded text-black'}
           type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Search value"
         />
-        <select className={'p-1'}
+        <select className={'p-2 rounded text-black'}
           value={selectedColumn}
           onChange={(e) => setSelectedColumn(e.target.value)}
         >
@@ -78,7 +81,7 @@ const Datatable = () => {
           <option value="current_team.founded_year">Current Team Founded Year</option>
           <option value="current_team.championships_won">Current Team Championships Won</option>
         </select>
-        <button type="submit" className={'m-3 p-1'}>Search</button>
+        <button type="submit" className='index-btn mx-2 p-2 bg-purple-500 border border-purple-600 rounded-[6px] hover:bg-purple-600'>Search</button>
       </form>
       <table>
         <thead>
@@ -120,10 +123,10 @@ const Datatable = () => {
         ))}
         </tbody>
       </table>
-      <button className='index-btn mx-2' onClick={() => downloadFile('json')}>
+      <button className='index-btn mx-2 p-2 bg-purple-500 border border-purple-600 rounded-[6px] hover:bg-purple-600 mt-2' onClick={() => downloadFile('json')}>
         Download Filtered JSON
       </button>
-      <button className='index-btn' onClick={() => downloadFile('csv')}>
+      <button className='index-btn mx-2 p-2 bg-purple-500 border border-purple-600 rounded-[6px] hover:bg-purple-600 mt-2' onClick={() => downloadFile('csv')}>
         Download Filtered CSV
       </button>
     </div>
