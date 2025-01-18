@@ -52,13 +52,13 @@ const Datatable = () => {
         e.preventDefault();
         handleSearch();
       }}>
-        <input
+        <input className={'m-3 p-1'}
           type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Search value"
         />
-        <select
+        <select className={'p-1'}
           value={selectedColumn}
           onChange={(e) => setSelectedColumn(e.target.value)}
         >
@@ -78,7 +78,7 @@ const Datatable = () => {
           <option value="current_team.founded_year">Current Team Founded Year</option>
           <option value="current_team.championships_won">Current Team Championships Won</option>
         </select>
-        <button type="submit">Search</button>
+        <button type="submit" className={'m-3 p-1'}>Search</button>
       </form>
       <table>
         <thead>
@@ -120,7 +120,7 @@ const Datatable = () => {
         ))}
         </tbody>
       </table>
-      <button className='index-btn' onClick={() => downloadFile('json')}>
+      <button className='index-btn mx-2' onClick={() => downloadFile('json')}>
         Download Filtered JSON
       </button>
       <button className='index-btn' onClick={() => downloadFile('csv')}>

@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1e1e1e;
+  color: white;
+}
+
+.header-title {
+  font-size: 24px;
+  color: mediumpurple;
+}
+
+.header-login-btn {
+  background-color: mediumpurple;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.header-login-btn:hover {
+  background-color: rebeccapurple;
+}

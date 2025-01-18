@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
     font-family: "Roboto Light", sans-serif;
     margin: 0;
@@ -14,5 +18,4 @@ body {
 
 #root {
     width: 100%;
-    margin: 20px;
 }
