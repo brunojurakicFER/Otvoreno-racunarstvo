@@ -1,22 +1,22 @@
-GET http://localhost:3000/drivers/671e81e9989d604df06674ba
+GET http://localhost:10000/drivers/671e81e9989d604df06674ba
 
 ###
 
 
-GET http://localhost:3000/drivers
+GET http://localhost:10000/drivers
 
 ###
 
-GET http://localhost:3000/teams
+GET http://localhost:10000/teams
 
 ###
 
 
-GET http://localhost:3000/drivers/nationality/British
+GET http://localhost:10000/drivers/nationality/British
 
 ###
 
-GET http://localhost:3000/drivers/status/active
+GET http://localhost:10000/drivers/status/active
 
 ###
 
@@ -45,7 +45,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/drivers/671e81e9989d604df06674ba
+PUT http://localhost:10000/drivers/671e81e9989d604df06674ba
 Content-Type: application/json
 
 {
@@ -55,17 +55,17 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/drivers/677434fd8cd84fdf30ba0fb1
+DELETE http://localhost:10000/drivers/677434fd8cd84fdf30ba0fb1
 
 ###
 
-GET http://localhost:3000/drivers/json
+GET http://localhost:10000/drivers/json
 
 ###
 
-GET http://localhost:3000/drivers/csv
+GET http://localhost:10000/drivers/csv
 
 ###
 
-GET http://localhost:3000/drivers/export/json
+GET http://localhost:10000/drivers/export/json
 

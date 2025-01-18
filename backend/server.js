@@ -94,8 +94,8 @@ const filterDrivers = async (req, res, next) => {
       }
     }))
 
-    req.drivers = drivers
-    next()
+    res.locals.drivers = drivers;
+    next();
   } catch (err) {
     res.formatResponse('Error', err.message, null);
   }
@@ -119,16 +119,56 @@ const writeCsvFile = async (data) => {
   await fs.promises.writeFile(csvPath, csv);
 };
 
+const formatDriverAsJsonLd = (driver) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "identifier": driver._id,
+    "name": `${driver.name} ${driver.surname}`,
+    "nationality": driver.nationality,
+    "additionalProperty": [
+      { "@type": "PropertyValue", "name": "wins", "value": driver.wins },
+      { "@type": "PropertyValue", "name": "podiums", "value": driver.podiums },
+      { "@type": "PropertyValue", "name": "poles", "value": driver.poles },
+      { "@type": "PropertyValue", "name": "points", "value": driver.points },
+      { "@type": "PropertyValue", "name": "championships", "value": driver.championships },
+      { "@type": "PropertyValue", "name": "races_done", "value": driver.races_done },
+      { "@type": "PropertyValue", "name": "status", "value": driver.status }
+    ],
+    "memberOf": {
+      "@type": "SportsTeam",
+      "name": driver.current_team.name,
+      "location": { "@type": "Country", "name": driver.current_team.country },
+      "foundingDate": driver.current_team.founded_year,
+      "additionalProperty": [
+        { "@type": "PropertyValue", "name": "championships_won", "value": driver.current_team.championships_won }
+      ]
+    }
+  };
+};
+
+const formatDriversAsJsonLd = (req, res, next) => {
+  if (res.locals.drivers) {
+    res.locals.drivers = res.locals.drivers.map(formatDriverAsJsonLd);
+  }
+  next();
+};
+
 // get drivers json from file
 app.get('/drivers/json', (req, res) => {
-  const filePath = path.join(__dirname, '../F1_drivers.json')
-  res.setHeader('Content-Disposition', 'attachment; filename=F1_drivers.json')
-  res.sendFile(filePath, (err) => {
+  const filePath = path.join(__dirname, '../F1_drivers.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
-      res.formatResponse('Error', 'An error occurred while sending the JSON file', null);
+      return res.formatResponse('Error', 'An error occurred while reading the JSON file', null);
     }
-  })
-})
+    const drivers = JSON.parse(data);
+    const jsonLdDrivers = drivers.map(formatDriverAsJsonLd);
+    const jsonLdContent = JSON.stringify(jsonLdDrivers, null, 2);
+    
+    res.attachment('F1_drivers.json');
+    res.send(jsonLdContent);
+  });
+});
 
 // get drivers csv from file
 app.get('/drivers/csv', (req, res) => {
@@ -142,14 +182,14 @@ app.get('/drivers/csv', (req, res) => {
 })
 
 // get filtered drivers json from db
-app.get('/drivers/export/json', filterDrivers, (req, res) => {
-  res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.json')
-  res.json(req.drivers)
+app.get('/drivers/export/json', filterDrivers, formatDriversAsJsonLd, (req, res) => {
+  res.setHeader('Content-Disposition', 'attachment; filename=filtered_drivers.json');
+  res.json(res.locals.drivers);
 })
 
 // get filtered drivers csv from db
-app.get('/drivers/export/csv', filterDrivers, (req, res) => {
-  const drivers = req.drivers.map(driver => ({
+app.get('/drivers/export/csv', filterDrivers, async (req, res) => {
+  const drivers = res.locals.drivers.map(driver => ({
     ...driver,
     current_team_name: driver.current_team.name,
     current_team_country: driver.current_team.country,
@@ -175,54 +215,67 @@ app.get('/drivers/export/csv', filterDrivers, (req, res) => {
 })
 
 // get all drivers from db
-app.get('/drivers', filterDrivers, (req, res) => {
-  res.formatResponse('OK', 'Fetched drivers', req.drivers);
-})
+app.get('/drivers', filterDrivers, formatDriversAsJsonLd, (req, res) => {
+  res.formatResponse('OK', 'Fetched drivers', res.locals.drivers);
+});
 
 // get all teams
 app.get('/teams', async (req, res) => {
   try {
-    let teams = await Driver.distinct('current_team.name')
-    teams = teams.filter(team => team !== 'N/A')
-    res.formatResponse('OK', 'Fetched teams', teams);
+    let teams = await Driver.distinct('current_team.name');
+    teams = teams.filter(team => team !== 'N/A');
+    const jsonLdTeams = teams.map(team => ({
+      "@context": "https://schema.org",
+      "@type": "SportsTeam",
+      "name": team
+    }));
+    res.formatResponse('OK', 'Fetched teams', jsonLdTeams);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-})
+});
 
 // get drivers by nationality
-app.get('/drivers/nationality/:nationality', async (req, res) => {
+app.get('/drivers/nationality/:nationality', async (req, res, next) => {
   try {
-    const drivers = await Driver.find({ nationality: req.params.nationality })
-    res.formatResponse('OK', 'Fetched drivers by nationality', drivers);
+    const drivers = await Driver.find({ nationality: req.params.nationality }).lean();
+    res.locals.drivers = drivers;
+    next();
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.formatResponse('Error', err.message, null);
   }
-})
+}, formatDriversAsJsonLd, (req, res) => {
+  res.formatResponse('OK', 'Fetched drivers by nationality', res.locals.drivers);
+});
 
 // get drivers by status
-app.get('/drivers/status/:status', async (req, res) => {
+app.get('/drivers/status/:status', async (req, res, next) => {
   try {
-    const drivers = await Driver.find({ status: req.params.status })
-    res.formatResponse('OK', 'Fetched drivers by status', drivers);
+    const drivers = await Driver.find({ status: req.params.status }).lean();
+    res.locals.drivers = drivers;
+    next();
   } catch (err) {
     res.formatResponse('Error', err.message, null);
   }
-})
+}, formatDriversAsJsonLd, (req, res) => {
+  res.formatResponse('OK', 'Fetched drivers by status', res.locals.drivers);
+});
 
 // get a single driver by ID
-app.get('/drivers/:id', validateObjectId, async (req, res) => {
+app.get('/drivers/:id', validateObjectId, async (req, res, next) => {
   try {
-    const driver = await Driver.findById(req.params.id)
+    const driver = await Driver.findById(req.params.id).lean();
     if (!driver) {
-      res.formatResponse('Not Found', 'Driver with the provided ID doesn\'t exist', null);
-    } else {
-      res.formatResponse('OK', 'Fetched driver', driver);
+      return res.formatResponse('Not Found', 'Driver with the provided ID doesn\'t exist', null);
     }
+    res.locals.drivers = [driver];
+    next();
   } catch (err) {
     res.formatResponse('Error', err.message, null);
   }
-})
+}, formatDriversAsJsonLd, (req, res) => {
+  res.formatResponse('OK', 'Fetched driver', res.locals.drivers[0]);
+});
 
 // post for adding a new driver
 app.post('/drivers', async (req, res) => {

@@ -1,9 +1,8 @@
 'use client'
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Styles/Datatable.css';
-
 
 const Datatable = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -56,14 +55,14 @@ const Datatable = () => {
         handleSearch();
       }}>
         <input className={'m-3 p-1 rounded text-black'}
-          type="text"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Search value"
+               type="text"
+               value={searchValue}
+               onChange={(e) => setSearchValue(e.target.value)}
+               placeholder="Search value"
         />
         <select className={'p-2 rounded text-black'}
-          value={selectedColumn}
-          onChange={(e) => setSelectedColumn(e.target.value)}
+                value={selectedColumn}
+                onChange={(e) => setSelectedColumn(e.target.value)}
         >
           <option value="">All columns (Wildcard)</option>
           <option value="name">Name</option>
@@ -87,7 +86,6 @@ const Datatable = () => {
         <thead>
         <tr>
           <th>Name</th>
-          <th>Surname</th>
           <th>Nationality</th>
           <th>Wins</th>
           <th>Podiums</th>
@@ -104,21 +102,20 @@ const Datatable = () => {
         </thead>
         <tbody>
         {data.map((driver) => (
-          <tr key={driver._id}>
+          <tr key={driver.identifier}>
             <td>{driver.name}</td>
-            <td>{driver.surname}</td>
             <td>{driver.nationality}</td>
-            <td>{driver.wins}</td>
-            <td>{driver.podiums}</td>
-            <td>{driver.poles}</td>
-            <td>{driver.points}</td>
-            <td>{driver.championships}</td>
-            <td>{driver.races_done}</td>
-            <td>{driver.status}</td>
-            <td>{driver.current_team.name}</td>
-            <td>{driver.current_team.country}</td>
-            <td>{driver.current_team.founded_year}</td>
-            <td>{driver.current_team.championships_won}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'wins')?.value}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'podiums')?.value}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'poles')?.value}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'points')?.value}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'championships')?.value}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'races_done')?.value}</td>
+            <td>{driver.additionalProperty.find(prop => prop.name === 'status')?.value}</td>
+            <td>{driver.memberOf.name}</td>
+            <td>{driver.memberOf.location.name}</td>
+            <td>{driver.memberOf.foundingDate}</td>
+            <td>{driver.memberOf.additionalProperty.find(prop => prop.name === 'championships_won')?.value}</td>
           </tr>
         ))}
         </tbody>
