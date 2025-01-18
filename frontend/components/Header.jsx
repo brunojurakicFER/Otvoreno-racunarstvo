@@ -10,7 +10,11 @@ const Header = () => {
 
   const handleRefresh = async () => {
     try {
-      const res = await axios.get('http://localhost:10000/refresh-data')
+      const res = await axios.get('http://localhost:10000/refresh-data', {
+        headers: {
+          'user' : user
+        }
+      })
       console.log(res.data)
     } catch (e) {
       console.error(e)

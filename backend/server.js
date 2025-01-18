@@ -266,6 +266,10 @@ app.delete('/drivers/:id', validateObjectId, async (req, res) => {
 // route za refresh
 app.get('/refresh-data', async (req, res) => {
   try {
+    const token = req.headers['user']
+    if (!token) {
+      throw Error('Unauthorized')
+    }
     const drivers = await Driver.find().lean();
     
     const processedDrivers = drivers.map(driver => ({
