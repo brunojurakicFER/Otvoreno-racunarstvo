@@ -4,10 +4,16 @@ const mongoose = require('mongoose')
 const path = require('path')
 const json2csv = require('json2csv').parse
 const Driver = require('./models/Driver')
+const cors = require('cors')
 const { Parser } = require("json2csv")
+const fs = require('fs');
 
 const mongoDB = 'mongodb://localhost:27017/F1_drivers'
 app.use(express.json())
+
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 mongoose.connect(mongoDB)
   .then(() => console.log('MongoDB connected'))
@@ -94,6 +100,24 @@ const filterDrivers = async (req, res, next) => {
     res.formatResponse('Error', err.message, null);
   }
 }
+
+// funkcija za refresh db
+const writeJsonFile = async (data) => {
+  const jsonPath = path.join(__dirname, '../F1_drivers.json');
+  await fs.promises.writeFile(jsonPath, JSON.stringify(data, null, 2));
+};
+
+const writeCsvFile = async (data) => {
+  const csvPath = path.join(__dirname, '../F1_drivers.csv');
+  const fields = [
+    'name', 'surname', 'nationality', 'wins', 'podiums', 'poles', 
+    'points', 'championships', 'races_done', 'status',
+    'current_team.name', 'current_team.country', 
+    'current_team.founded_year', 'current_team.championships_won'
+  ];
+  const csv = json2csv(data, { fields });
+  await fs.promises.writeFile(csvPath, csv);
+};
 
 // get drivers json from file
 app.get('/drivers/json', (req, res) => {
@@ -239,6 +263,32 @@ app.delete('/drivers/:id', validateObjectId, async (req, res) => {
   }
 })
 
+// route za refresh
+app.get('/refresh-data', async (req, res) => {
+  try {
+    const drivers = await Driver.find().lean();
+    
+    const processedDrivers = drivers.map(driver => ({
+      ...driver,
+      current_team: {
+        name: driver.current_team?.name || 'N/A',
+        country: driver.current_team?.country || 'N/A',
+        founded_year: driver.current_team?.founded_year || 'N/A',
+        championships_won: driver.current_team?.championships_won || 'N/A'
+      }
+    }));
+
+    await Promise.all([
+      writeJsonFile(processedDrivers),
+      writeCsvFile(processedDrivers)
+    ]);
+
+    res.formatResponse('OK', 'Data files refreshed successfully', null);
+  } catch (err) {
+    res.formatResponse('Error', 'Failed to refresh data files: ' + err.message, null);
+  }
+});
+
 // OpenAPI json
 app.get('/openapi.json', (req, res) => {
   const filePath = path.join(__dirname, '../openapi.json')
@@ -258,6 +308,6 @@ app.use((req, res) => {
   res.status(404).formatResponse('Not Found', 'The requested URL was not found on this server', null);
 });
 
-app.listen(3000, () => {
-  console.log('server started on port 3000')
+app.listen(10000, () => {
+  console.log('server started on port 10000')
 })

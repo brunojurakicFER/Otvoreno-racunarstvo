@@ -1,8 +1,6 @@
 [
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674ba"
-    },
+    "_id": "671e81e9989d604df06674ba",
     "name": "Lewis",
     "surname": "Hamilton",
     "nationality": "British",
@@ -21,9 +19,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674bb"
-    },
+    "_id": "671e81e9989d604df06674bb",
     "name": "Michael",
     "surname": "Schumacher",
     "nationality": "German",
@@ -42,9 +38,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674bc"
-    },
+    "_id": "671e81e9989d604df06674bc",
     "name": "Sebastian",
     "surname": "Vettel",
     "nationality": "German",
@@ -63,9 +57,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674bd"
-    },
+    "_id": "671e81e9989d604df06674bd",
     "name": "Alain",
     "surname": "Prost",
     "nationality": "French",
@@ -84,9 +76,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674be"
-    },
+    "_id": "671e81e9989d604df06674be",
     "name": "Niki",
     "surname": "Lauda",
     "nationality": "Austrian",
@@ -105,9 +95,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674bf"
-    },
+    "_id": "671e81e9989d604df06674bf",
     "name": "Ayrton",
     "surname": "Senna",
     "nationality": "Brazilian",
@@ -126,9 +114,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674c0"
-    },
+    "_id": "671e81e9989d604df06674c0",
     "name": "Fernando",
     "surname": "Alonso",
     "nationality": "Spanish",
@@ -143,13 +129,11 @@
       "name": "Aston Martin",
       "country": "United Kingdom",
       "founded_year": 2021,
-      "championships_won": 0
+      "championships_won": "N/A"
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674c1"
-    },
+    "_id": "671e81e9989d604df06674c1",
     "name": "Kimi",
     "surname": "Raikkonen",
     "nationality": "Finnish",
@@ -168,9 +152,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674c2"
-    },
+    "_id": "671e81e9989d604df06674c2",
     "name": "Jenson",
     "surname": "Button",
     "nationality": "British",
@@ -189,9 +171,7 @@
     }
   },
   {
-    "_id": {
-      "$oid": "671e81e9989d604df06674c3"
-    },
+    "_id": "671e81e9989d604df06674c3",
     "name": "Max",
     "surname": "Verstappen",
     "nationality": "Dutch",
